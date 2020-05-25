@@ -23,6 +23,6 @@ steps:
     ensureBackend: true
     backendAzureRmResourceGroupName: 'adminportal-rg'
     backendAzureRmResourceGroupLocation: 'westeurope'
-    backendAzureRmStorageAccountName: 'adminportaldarshana'
+    backendAzureRmStorageAccountName: 'adminportalstorageac'
     backendAzureRmContainerName: 'adminportalcontainer'
     backendAzureRmKey: 'adminportal-dev.tfstate'
