@@ -23,6 +23,6 @@ steps:
     ensureBackend: true
     backendAzureRmResourceGroupName: 'terraform-cli-rg'
     backendAzureRmResourceGroupLocation: 'westeurope'
-    backendAzureRmStorageAccountName: 'adminportal-storage-account'
-    backendAzureRmContainerName: 'adminportal-container'
+    backendAzureRmStorageAccountName: 'adminportalstorageaccount'
+    backendAzureRmContainerName: 'adminportalcontainer'
     backendAzureRmKey: 'adminportal-dev.tfstate'
