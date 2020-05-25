@@ -6,7 +6,7 @@ pool:
 
 steps:
 - script: echo Hello, world!
-  displayName: 'Run a one-line'
+  displayName: 'Run a one-li'
 
 - task: DownloadSecureFile@1
   name: publickey
