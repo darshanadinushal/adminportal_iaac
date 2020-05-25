@@ -21,7 +21,7 @@ steps:
     backendType: 'azurerm'
     backendServiceArm: 'adminportal-resource-manager-service-connection'
     ensureBackend: true
-    backendAzureRmResourceGroupName: 'terraform-cli-rg'
+    backendAzureRmResourceGroupName: 'terraformbackendrg'
     backendAzureRmResourceGroupLocation: 'westeurope'
     backendAzureRmStorageAccountName: 'adminportalstorageaccount'
     backendAzureRmContainerName: 'adminportalcontainer'
