@@ -19,10 +19,10 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes'
     commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
     backendType: 'azurerm'
-    backendServiceArm: 'adminportal-resource-manager-service-connection'
+    backendServiceArm: 'azure-resource-manager-service-connection'
     ensureBackend: true
     backendAzureRmResourceGroupName: 'terraformbackendrg'
     backendAzureRmResourceGroupLocation: 'westeurope'
-    backendAzureRmStorageAccountName: 'adminportalstorageaccount'
+    backendAzureRmStorageAccountName: 'adminportalstorageaccountdarshana'
     backendAzureRmContainerName: 'adminportalcontainer'
     backendAzureRmKey: 'adminportal-dev.tfstate'
