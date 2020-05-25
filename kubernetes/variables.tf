@@ -11,15 +11,15 @@ variable node_count {
 }
 
 variable dns_prefix {
-  default = "dns-adminportal"
+  default = "dnsprefix"
 }
 
 variable cluster_name {
-  default = "adminportal-k8s"
+  default = "adminportalk8s"
 }
 
 variable resource_group {
-  default = "adminportal-rg"
+  default = "adminportalrg"
 }
 
 variable ssh_public_key {}
