@@ -15,7 +15,7 @@ variable dns_prefix {
 }
 
 variable cluster_name {
-  default = "adminportalk8s"
+  default = "adminportalcluster"
 }
 
 variable resource_group {
