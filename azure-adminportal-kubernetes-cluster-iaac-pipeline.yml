@@ -1,0 +1,28 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: DownloadSecureFile@1
+  name: publickey
+  inputs:
+    secureFile: 'adminportal_rsa.pub'
+
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
+    backendType: 'azurerm'
+    backendServiceArm: 'adminportal-resource-manager-service-connection'
+    ensureBackend: true
+    backendAzureRmResourceGroupName: 'adminportal-terraform-rg'
+    backendAzureRmResourceGroupLocation: 'westeurope'
+    backendAzureRmStorageAccountName: 'adminportal-storage-account'
+    backendAzureRmContainerName: 'adminportal-container'
+    backendAzureRmKey: 'adminportal-dev.tfstate'
