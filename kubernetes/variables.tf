@@ -19,7 +19,7 @@ variable cluster_name {
 }
 
 variable resource_group {
-  default = "adminportalrg"
+  default = "adminportal"
 }
 
 variable ssh_public_key {}
