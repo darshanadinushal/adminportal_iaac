@@ -60,6 +60,152 @@ $(client_id) ,$(client_secret) we can add using variables
     
 11. Run the pipeline and give the permission ,by click the permit accessfile 
 
+# Terraform Apply command execute 
+12. Pipeline ymal we need to add the commad for APPLY
+
+Go to the pipeline Copy the `init` task paste it ,
+Remove the unnecessary things.
+```
+- task: TerraformCLI@0
+  inputs:
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes'
+    environmentServiceName: 'adminportal-rg-service-connection'
+    commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
+```    
+
+13. Run the pipeline  After execute the terraform file.
+      It will create Resource group Kubernetes_dev
+      After execute the first step ,It will create azure kubernetes cluster  name 'terraform-k8s' inside kubernetes_dev
+      
+# Login Kubernete Cluster using local machine 
+   1. Install the Install AZ client to local machine
+   2. az login 
+   3. Go To Kubernete cluster that previously created.
+   4. Go to the dashboard.Run the (3) , (4) the steps.
+   5. Then can use the Kubernete command. Ex- kubectl get all 
+   
+# Deploy  Application  In here we will deploy the application to this Kubernete cluster. 
+
+1. Go To Project setting --> Service connection --> new service connection
+
+2. Create new pipeline for our application deployment     
+    Go To pipeline --> GitHub --> Select Repo --> Starter pipeline
+    Following step we need to do in docker
+      1. Stage 1 
+        ○ Build Docker Image 
+        Publish the k8s Files (Deployement.yaml file)
+      2. Stage 2
+		○ Download the k8s Files
+     Deploy to k8s Cluster with Docker Image
+     
+ 3. Build Docker Image
+```
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        repository: 'darshanadinushal/azure_docker-currency-exchange'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+```
+4. Publish the k8s Files (Deployement.yaml file)
+     Artifact name we will give any name.
+```
+#Publish the k8s Files (Deployement.yaml file)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifests'
+        publishLocation: 'Container'
+```
+5. Deploy the Image to Kubernetes cluster && Copy to the Build.ArtifactStagingDirectory
+
+```
+trigger:
+- master
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+#Stage 1 
+#Build Docker Image 
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'docker-hub-connection'
+        repository: 'darshanadinushal/azure_docker-currency-exchange'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+
+#Copy to the Build.ArtifactStagingDirectory
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/*.yaml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
+#Publish the k8s Files (Deployement.yaml file)
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'manifests'
+        publishLocation: 'Container'
+
+#Stage 2 Deploy Image
+- stage: Deploy
+  displayName: Deploy image
+  jobs:  
+  - job: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps: 
+#Download the k8s Files
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        buildType: 'current'
+        artifactName: 'manifests'
+        itemPattern: '**/*.yaml'
+        targetPath: '$(System.ArtifactsDirectory)'
+#Deploy to k8s Cluster with Docker Image
+    - task: KubernetesManifest@0
+      inputs:
+        action: 'deploy'
+        kubernetesServiceConnection: 'azure-kubernete-connection'
+        namespace: 'default'
+        manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
+        containers: 'darshanadinushal/azure_docker-currency-exchange:$(tag)'
+        
+```    
+      
+
+
 
     
 
