@@ -85,7 +85,7 @@ Remove the unnecessary things.
    4. Go to the dashboard.Run the (3) , (4) the steps.
    5. Then can use the Kubernete command. Ex- kubectl get all 
    
-# Deploy  Application  In here we will deploy the application to this Kubernete cluster. 
+# Deploy  Application to Kubernete cluster. 
 
 1. Go To Project setting --> Service connection --> new service connection
 
