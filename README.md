@@ -8,7 +8,7 @@ https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-late
 3. Create Service Account To Create Azure K8S Cluster using Terraform
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/<<azure_subscription_id>>"
 Here we give role base access control  role  of "Contributor" ,that role can access given subscription all the things. 
-
+```
 {
   "appId": "xxxxxxx-sampleId",
   "displayName": "azure-cli-2020-05-21-15-48-26",
@@ -16,6 +16,7 @@ Here we give role base access control  role  of "Contributor" ,that role can acc
   "password": "s^4h4xa7u2RO$7>]sample",
   "tenant": "xxxxxxxx0-53ca-47b2-sample"
 }
+```
 
 4. Create Public Key for SSH Access
 ssh-keygen -m PEM -t rsa -b 4096 
@@ -32,7 +33,8 @@ Terraform 2 (https://marketplace.visualstudio.com/items?itemName=charleszipp.azu
 Go to Pipeline --> GitHub --> Select Repo --> Select Starter pipeline
 
 8. Add Terraform CLI task to YAML.
-	
+
+```
 - task: TerraformCLI@0
   inputs:
     command: 'init'
@@ -46,6 +48,6 @@ Go to Pipeline --> GitHub --> Select Repo --> Select Starter pipeline
     backendAzureRmStorageAccountName: 'adminportalstorageac'
     backendAzureRmContainerName: 'adminportalcontainer'
     backendAzureRmKey: 'adminportal-dev.tfstate'
-
+```
 
 
