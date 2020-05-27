@@ -19,7 +19,6 @@ Here we give role base access control  role  of "Contributor" ,that role can acc
 
 4. Create Public Key for SSH Access
 ssh-keygen -m PEM -t rsa -b 4096 
-# PEM - Privacy Enhanced Mail - Certificate Format RSA- Encryption Algorithm
 
 5. We create a connection to Azure.
 Go To Project setting --> Service connection --> New Service connection --> Azure Resource Manager
@@ -34,7 +33,19 @@ Go to Pipeline --> GitHub --> Select Repo --> Select Starter pipeline
 
 8. Add Terraform CLI task to YAML.
 	
-
+- task: TerraformCLI@0
+  inputs:
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes'
+    #commandOptions: '-var client_id=$(client_id) -var client_secret=$(client_secret) -var ssh_public_key=$(publickey.secureFilePath)'
+    backendType: 'azurerm'
+    backendServiceArm: 'adminportal-rg-service-connection'
+    ensureBackend: true
+    backendAzureRmResourceGroupName: 'adminportal-rg'
+    backendAzureRmResourceGroupLocation: 'westeurope'
+    backendAzureRmStorageAccountName: 'adminportalstorageac'
+    backendAzureRmContainerName: 'adminportalcontainer'
+    backendAzureRmKey: 'adminportal-dev.tfstate'
 
 
 
