@@ -1,5 +1,7 @@
 # CI, CD & IAC on Azure AKS Kubernetes Clusters - Docker, Azure DevOps & Terraform
 
+# Create Azure K8S Cluster using Terraform
+
 1. Install AZ client to local machine
 https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
 
@@ -24,7 +26,8 @@ ssh-keygen -m PEM -t rsa -b 4096
 5. We create a connection to Azure.
 Go To Project setting --> Service connection --> New Service connection --> Azure Resource Manager
 
-6. Before we are using terraform pipeline we need couple of terraform plugins ,Install it
+6. Before we are using terraform pipeline we need couple of terraform plugins 
+Install it
 Terraform 1 (https://marketplace.visualstudio.com/items?itemName=ms-devlabs.custom-terraform-tasks)
 Terraform 2 (https://marketplace.visualstudio.com/items?itemName=charleszipp.azure-pipelines-tasks-terraform)
 
@@ -49,5 +52,18 @@ Go to Pipeline --> GitHub --> Select Repo --> Select Starter pipeline
     backendAzureRmContainerName: 'adminportalcontainer'
     backendAzureRmKey: 'adminportal-dev.tfstate'
 ```
+9. Add $(client_id) ,$(client_secret) ssh_public_key 
+$(client_id) ,$(client_secret) we can add using variables
+
+10. Add ssh_public_key as a scure file
+    Go to Library --> Secure files  --> Add the ssh key file we are create step (4)
+    
+11. Run the pipeline and give the permission ,by click the permit accessfile 
+
+
+    
+
+
+
 
 
