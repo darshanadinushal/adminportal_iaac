@@ -87,6 +87,10 @@ Remove the unnecessary things.
    
 # Deploy  Application to Kubernete cluster. 
 
+Here we deploye angular fontend application to this kubernete clister.Here is the git repository
+# https://github.com/darshanadinushal/AdminProtalweb
+
+
 1. Go To Project setting --> Service connection --> new service connection
 
 2. Create new pipeline for our application deployment     
