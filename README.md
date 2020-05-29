@@ -183,9 +183,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps: 
-    - script: |
-        echo 1 > "$(System.ArtifactsDirectory)"
-        echo 2 > "$(System.ArtifactsDirectory)/manifests"
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
