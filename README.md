@@ -101,20 +101,20 @@ Remove the unnecessary things.
      
  3. Build Docker Image
 ```
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:  
+stages: 
+- stage: Buid 
+  displayName: Build Image
+  jobs:
   - job: Build
-    displayName: Build
+    displayName:  Build-job
     pool:
       vmImage: 'ubuntu-latest'
-    steps:
+    steps: 
     - task: Docker@2
       displayName: Build an image
       inputs:
-        containerRegistry: 'docker-hub-connection'
-        repository: 'darshanadinushal/azure_docker-currency-exchange'
+        containerRegistry: 'dockerhub-connection'
+        repository: 'darshanadinushal/adminportalclientapp'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
@@ -133,7 +133,7 @@ stages:
 
 ```
 trigger:
-- master
+- develop
 
 resources:
 - repo: self
@@ -141,67 +141,61 @@ resources:
 variables:
   tag: '$(Build.BuildId)'
 
-#Stage 1 
-#Build Docker Image 
-
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:  
+stages: 
+- stage: Buid 
+  displayName: Build Image
+  jobs:
   - job: Build
-    displayName: Build
+    displayName:  Build-job
     pool:
       vmImage: 'ubuntu-latest'
-    steps:
+    steps: 
     - task: Docker@2
       displayName: Build an image
       inputs:
-        containerRegistry: 'docker-hub-connection'
-        repository: 'darshanadinushal/azure_docker-currency-exchange'
+        containerRegistry: 'dockerhub-connection'
+        repository: 'darshanadinushal/adminportalclientapp'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: '$(tag)'
 
-#Copy to the Build.ArtifactStagingDirectory
     - task: CopyFiles@2
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)'
         Contents: '**/*.yaml'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-
-#Publish the k8s Files (Deployement.yaml file)
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'manifests'
         publishLocation: 'Container'
 
-#Stage 2 Deploy Image
-- stage: Deploy
-  displayName: Deploy image
-  jobs:  
+- stage: Deploy 
+  displayName: Deploy Image
+  jobs:
   - job: Deploy
     displayName: Deploy
     pool:
       vmImage: 'ubuntu-latest'
     steps: 
-#Download the k8s Files
+    - script: |
+        echo 1 > "$(System.ArtifactsDirectory)"
+        echo 2 > "$(System.ArtifactsDirectory)/manifests"
     - task: DownloadPipelineArtifact@2
       inputs:
         buildType: 'current'
         artifactName: 'manifests'
         itemPattern: '**/*.yaml'
         targetPath: '$(System.ArtifactsDirectory)'
-#Deploy to k8s Cluster with Docker Image
+
     - task: KubernetesManifest@0
       inputs:
         action: 'deploy'
-        kubernetesServiceConnection: 'azure-kubernete-connection'
+        kubernetesServiceConnection: 'adminportal-kubernetes-connection'
         namespace: 'default'
         manifests: '$(System.ArtifactsDirectory)/configuration/kubernetes/deployment.yaml'
-        containers: 'darshanadinushal/azure_docker-currency-exchange:$(tag)'
-        
+        containers: 'darshanadinushal/adminportalclientapp:$(tag)'
 ```    
       
 
